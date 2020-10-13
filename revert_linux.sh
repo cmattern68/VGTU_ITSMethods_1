@@ -31,3 +31,6 @@ rm /etc/pam.d/common-password.backup
 
 cp /etc/login.defs.backup /etc/login.defs
 rm /etc/login.defs.backup
+
+cp /etc/rsyslog.conf.backup /etc/rsyslog.conf
+rm /etc/rsyslog.conf.backup

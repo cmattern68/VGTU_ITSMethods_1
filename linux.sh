@@ -7,6 +7,7 @@ fi
 
 apt update && apt upgrade
 apt install libpam-pwquality
+apt install rsyslog
 
 echo ""
 echo "###########################################"
@@ -125,11 +126,21 @@ echo "#                                         #"
 echo "###########################################"
 echo ""
 
+systemctl start rsyslog
+systemctl enable rsyslog
+
+cp /etc/rsyslog.conf /etc/rsyslog.conf.backup
+sed -i 's/#module(load="imtcp")/module(load="imtcp")/' /etc/rsyslog.conf
+sed -i 's/#input(type="imtcp" port="514")/input(type="imtcp" port="514")/' /etc/rsyslog.conf
+
+echo -e '\n$template RemoteLogs,"/var/log/%HOSTNAME%/%PROGRAMNAME%.log"\n*.* ?RemoteLogs\n& ~' >> /etc/rsyslog.conf
+
+systemctl restart rsyslog
 
 echo ""
 echo "###########################################"
 echo "#                                         #"
-echo "#         Task 6:                         #"
+echo "#           Task 6: Ownership             #"
 echo "#                                         #"
 echo "###########################################"
 echo ""
@@ -137,7 +148,7 @@ echo ""
 echo ""
 echo "###########################################"
 echo "#                                         #"
-echo "#         Task 7:                         #"
+echo "#         Task 7: Additional Users        #"
 echo "#                                         #"
 echo "###########################################"
 echo ""
@@ -145,7 +156,7 @@ echo ""
 echo ""
 echo "###########################################"
 echo "#                                         #"
-echo "#                Task 8:                  #"
+echo "#        Task 8: Record Systems           #"
 echo "#                                         #"
 echo "###########################################"
 echo ""
