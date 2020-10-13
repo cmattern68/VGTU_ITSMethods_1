@@ -8,65 +8,173 @@ fi
 echo ""
 echo "###########################################"
 echo "#                                         #"
-echo "#         Generate Users & Groups         #"
+echo "#     Task 1 Generate Users & Groups      #"
 echo "#                                         #"
 echo "###########################################"
 echo ""
 
-addgroup "sysadm"
-addgroup "ceo"
-addgroup "administration"
-addgroup "managers"
+# Create Groups and Base Directory
+groupadd "sysadm"
+mkdir -m 751 /home/sysadm
 
-mkdir /home/administration/
-mkdir /home/managers/
+groupadd "ceo"
+mkdir -m 751 /home/ceo
 
-useradd -m -g sysadm -G root,administration,managers "Admin"
-echo "Admin:6FD9Fy" | chpasswd
-chage -d 0 Admin
+groupadd "administration"
+mkdir -m 751 /home/administration
+chown root:administration /home/administration
 
-useradd -m -g ceo -G administration,managers "Chief"
-echo "Chief:6=D9Fy" | chpasswd
-chage -d 0 Chief
+groupadd "managers"
+mkdir -m 751 /home/managers
+chown root:managers /home/managers
 
-useradd -m -d "/home/administration/alice" -g administration -G managers "Alice"
-echo "Alice:6FD9Fy" | chpasswd
-chage -d 0 Alice
+echo "Groups created."
 
-useradd -m -d "/home/administration/gabi"  -g administration -G managers "Gabi"
-echo "Gabi:6FD9Fy" | chpasswd
-chage -d 0 Gabi
+# Setup Directories ACLs
+setfacl -d -m g:ceo:rwX /home/*
+setfacl -d -m g:sysadm:rwX /home/administration
+setfacl -d -m g:sysadm:rwX /home/managers
+setfacl -d -m g:administration:rwX /home/administration
+setfacl -d -m g:administration:r-X /home/managers
+setfacl -d -m g:managers:rwX /home/managers
 
-useradd -m -d "/home/managers/anthony" -g managers "Anthony"
-echo "Anthony:6FD9Fy" | chpasswd
-chage -d 0 Anthony
+echo "Permissions Set."
 
-useradd -m -d "/home/managers/elisa" -g managers "Elisa"
-echo "Elisa:6FD9Fy" | chpasswd
-chage -d 0 Elisa
+# Create Users and set Groups
+useradd -d /home/sysadm -g sysadm -G root,administration,managers "Admin"
+chown Admin:sysadm /home/sysadm
+echo "Admin ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-useradd -m -d "/home/managers/jolie" -g managers "Jolie"
-echo "Jolie:6FD9Fy" | chpasswd
-chage -d 0 Jolie
+useradd -d /home/ceo -g ceo -G administration,managers "Chief"
+chown Chief:ceo /home/ceo
 
-useradd -m -d "/home/managers/tom" -g managers "Tom"
-echo "Tom:6FD9Fy" | chpasswd
-chage -d 0 Tom
+useradd -m -b /home/administration -g administration -G managers "Alice"
+
+useradd -m -b /home/administration  -g administration -G managers "Gabi"
+
+useradd -m -b /home/managers -g managers "Anthony"
+
+useradd -m -b /home/managers -g managers "Elisa"
+
+useradd -m -b /home/managers -g managers "Jolie"
+
+useradd -m -b /home/managers -g managers "Tom"
+
+echo "Users created."
+
+# Create General & Special Directory
+
+mkdir -m 771 /common
+setfacl -d -m g:ceo:rwX /common
+setfacl -d -m g:sysadm:rwX /common
+setfacl -d -m g:administration:rwX /common
+setfacl -d -m g:managers:rwX /common
+
+mkdir -m 700 /special
+setfacl -m user:Tom:rwX /special
+setfacl -m user:Alice:rwX /special
+# A qui on donne les droits ?
+
+echo "Common and Special directories created."
 
 echo ""
 echo "###########################################"
 echo "#                                         #"
-echo "#     Create Shared Folder & Set ACLs     #"
+echo "#       Task 2: Pemission to CEO Dir      #"
 echo "#                                         #"
 echo "###########################################"
 echo ""
 
-chgrp "administration"  /home/administration/
-chgrp "managers" /home/managers/
-chgrp "sysadm" /home/Admin/
-chgrp "ceo" /home/Chief/
 
-chmod 740 /home/administration/
-chmod 740 /home/managers/
-chmod 740 /home/Admin/
-chmod 740 /home/Chief/
+
+
+echo ""
+echo "###########################################"
+echo "#                                         #"
+echo "#         Task 3: Password Policy         #"
+echo "#                                         #"
+echo "###########################################"
+echo ""
+
+
+
+
+
+echo ""
+echo "###########################################"
+echo "#                                         #"
+echo "#            Task 4: Prohibit             #"
+echo "#                                         #"
+echo "###########################################"
+echo ""
+
+
+
+
+
+echo ""
+echo "###########################################"
+echo "#                                         #"
+echo "#         Task 5: Event Logging           #"
+echo "#                                         #"
+echo "###########################################"
+echo ""
+
+
+
+
+
+
+echo ""
+echo "###########################################"
+echo "#                                         #"
+echo "#         Task 6:                         #"
+echo "#                                         #"
+echo "###########################################"
+echo ""
+
+
+
+
+
+
+echo ""
+echo "###########################################"
+echo "#                                         #"
+echo "#         Task 7:                         #"
+echo "#                                         #"
+echo "###########################################"
+echo ""
+
+
+
+
+
+
+
+
+
+echo ""
+echo "###########################################"
+echo "#                                         #"
+echo "#                Task 8:                  #"
+echo "#                                         #"
+echo "###########################################"
+echo ""
+
+
+
+
+
+
+
+
+
+
+echo ""
+echo "###########################################"
+echo "#                                         #"
+echo "#                 Enjoy !                 #"
+echo "#                                         #"
+echo "###########################################"
+echo ""

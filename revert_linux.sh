@@ -16,8 +16,10 @@ userdel Tom
 
 rm -rf /home/administration
 rm -rf /home/managers
-rm -rf /home/Chief
-rm -rf /home/Admin
+rm -rf /home/ceo
+rm -rf /home/sysadm
+rm -rf /common
+rm -rf /special
 
 delgroup sysadm
 delgroup ceo
