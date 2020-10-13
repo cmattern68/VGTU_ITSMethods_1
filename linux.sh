@@ -5,6 +5,9 @@ if [[ $EUID -ne 0 ]]; then
 	exit 1
 fi
 
+apt update && apt upgrade
+apt install libpam-pwquality
+
 echo ""
 echo "###########################################"
 echo "#                                         #"
@@ -32,8 +35,8 @@ echo "Groups created."
 
 # Setup Directories ACLs
 setfacl -d -m g:ceo:rwX /home/*
-setfacl -d -m g:sysadm:rwX /home/administration
-setfacl -d -m g:sysadm:rwX /home/managers
+setfacl -d -m g:sysadm:r-X /home/administration
+setfacl -d -m g:sysadm:r-X /home/managers
 setfacl -d -m g:administration:rwX /home/administration
 setfacl -d -m g:administration:r-X /home/managers
 setfacl -d -m g:managers:rwX /home/managers
@@ -85,8 +88,9 @@ echo "#                                         #"
 echo "###########################################"
 echo ""
 
+setfacl -m user:Alice:rw- /home/ceo
 
-
+echo "Accountant Alice has been provied rw access to /home/ceo."
 
 echo ""
 echo "###########################################"
@@ -96,9 +100,14 @@ echo "#                                         #"
 echo "###########################################"
 echo ""
 
+# https://linuxhint.com/secure_password_policies_ubuntu/
 
+cp /etc/pam.d/common-password /etc/pam.d/common-password.backup
+cp /etc/login.defs /etc/login.defs.backup
+sed -i "s/password	requisite			pam_pwquality.so retry=3/password	requisite	pam_cracklib.so reject_username retry=5 minlength=8 lcredit=1 ucredit=1 dcredit=1 ocredit=1/" /etc/pam.d/common-password
+sed -i "s/PASS_MAX_DAYS	99999/PASS_MAX_DAYS 30/" /etc/login.defs
 
-
+echo "Password policy set: 5 retry, minimul length: 8, 1 lowercase, 1 upercase, 1 digit, 1 symbol, and the password cannot contain the username, password max age is 30 days."
 
 echo ""
 echo "###########################################"
@@ -107,10 +116,6 @@ echo "#            Task 4: Prohibit             #"
 echo "#                                         #"
 echo "###########################################"
 echo ""
-
-
-
-
 
 echo ""
 echo "###########################################"
@@ -121,10 +126,6 @@ echo "###########################################"
 echo ""
 
 
-
-
-
-
 echo ""
 echo "###########################################"
 echo "#                                         #"
@@ -132,11 +133,6 @@ echo "#         Task 6:                         #"
 echo "#                                         #"
 echo "###########################################"
 echo ""
-
-
-
-
-
 
 echo ""
 echo "###########################################"
@@ -146,14 +142,6 @@ echo "#                                         #"
 echo "###########################################"
 echo ""
 
-
-
-
-
-
-
-
-
 echo ""
 echo "###########################################"
 echo "#                                         #"
@@ -161,15 +149,6 @@ echo "#                Task 8:                  #"
 echo "#                                         #"
 echo "###########################################"
 echo ""
-
-
-
-
-
-
-
-
-
 
 echo ""
 echo "###########################################"

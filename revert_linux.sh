@@ -25,3 +25,9 @@ delgroup sysadm
 delgroup ceo
 delgroup administration
 delgroup managers
+
+cp /etc/pam.d/common-password.backup /etc/pam.d/common-password
+rm /etc/pam.d/common-password.backup
+
+cp /etc/login.defs.backup /etc/login.defs
+rm /etc/login.defs.backup
