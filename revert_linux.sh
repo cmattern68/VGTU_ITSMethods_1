@@ -34,3 +34,6 @@ rm /etc/login.defs.backup
 
 cp /etc/rsyslog.conf.backup /etc/rsyslog.conf
 rm /etc/rsyslog.conf.backup
+
+cp /etc/sudoers.backup /etc/sudoers
+rm /etc/sudoers.backup

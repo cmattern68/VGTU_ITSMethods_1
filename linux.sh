@@ -5,9 +5,21 @@ if [[ $EUID -ne 0 ]]; then
 	exit 1
 fi
 
+echo ""
+echo "###########################################"
+echo "#                                         #"
+echo "#      Task 0: Install dependencies       #"
+echo "#                                         #"
+echo "###########################################"
+echo ""
+
 apt update && apt upgrade
 apt install libpam-pwquality
 apt install rsyslog
+apt install sssd-common
+apt install make
+apt install npm
+apt install rpm
 
 echo ""
 echo "###########################################"
@@ -47,6 +59,7 @@ echo "Permissions Set."
 # Create Users and set Groups
 useradd -d /home/sysadm -g sysadm -G root,administration,managers "Admin"
 chown Admin:sysadm /home/sysadm
+cp /etc/sudoers /etc/sudoers.backup
 echo "Admin ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 useradd -d /home/ceo -g ceo -G administration,managers "Chief"
@@ -108,15 +121,7 @@ cp /etc/login.defs /etc/login.defs.backup
 sed -i "s/password	requisite			pam_pwquality.so retry=3/password	requisite	pam_cracklib.so reject_username retry=5 minlength=8 lcredit=1 ucredit=1 dcredit=1 ocredit=1/" /etc/pam.d/common-password
 sed -i "s/PASS_MAX_DAYS	99999/PASS_MAX_DAYS 30/" /etc/login.defs
 
-echo "Password policy set: 5 retry, minimul length: 8, 1 lowercase, 1 upercase, 1 digit, 1 symbol, and the password cannot contain the username, password max age is 30 days."
-
-echo ""
-echo "###########################################"
-echo "#                                         #"
-echo "#            Task 4: Prohibit             #"
-echo "#                                         #"
-echo "###########################################"
-echo ""
+echo "Password policy set: 5 retry, minimum length: 8, 1 lowercase, 1 upercase, 1 digit, 1 symbol, and the password cannot contain the username, password max age is 30 days."
 
 echo ""
 echo "###########################################"
@@ -145,13 +150,11 @@ echo "#                                         #"
 echo "###########################################"
 echo ""
 
-echo ""
-echo "###########################################"
-echo "#                                         #"
-echo "#         Task 7: Additional Users        #"
-echo "#                                         #"
-echo "###########################################"
-echo ""
+sudo -u Anthony touch /home/managers/Anthony/Anthony.txt
+echo "This file was created by Anthony" >> /home/managers/Anthony/Anthony.txt
+chown Alice /home/managers/Anthony/Anthony.txt
+
+echo "A file named /home/managers/Anthony/Anthony.txt has been created. Ownership has been set to Alice."
 
 echo ""
 echo "###########################################"
@@ -160,6 +163,12 @@ echo "#        Task 8: Record Systems           #"
 echo "#                                         #"
 echo "###########################################"
 echo ""
+
+git clone https://github.com/Scribery/cockpit-session-recording.git /home/sysadm/cockpit-session-recording/
+cd /home/sysadm/cockpit-session-recording
+sudo make
+sudo make install
+sudo npm run eslint
 
 echo ""
 echo "###########################################"
