@@ -60,7 +60,7 @@ chown Admin:sysadm /home/sysadm
 cp /etc/sudoers /etc/sudoers.backup
 echo "Admin ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-useradd -d /home/ceo -g ceo -G administration,managers "Chief"
+useradd -d /home/ceo -g ceo -G sysadm,administration,managers "Chief"
 chown Chief:ceo /home/ceo
 
 useradd -m -b /home/administration -g administration -G managers "Alice"
