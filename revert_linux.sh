@@ -37,3 +37,6 @@ rm /etc/rsyslog.conf.backup
 
 cp /etc/sudoers.backup /etc/sudoers
 rm /etc/sudoers.backup
+
+sudo systemctl stop rsyslog
+sudo systemctl stop auditd

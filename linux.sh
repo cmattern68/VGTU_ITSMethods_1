@@ -16,10 +16,8 @@ echo ""
 apt update && apt upgrade
 apt install libpam-pwquality
 apt install rsyslog
-apt install sssd-common
-apt install make
-apt install npm
-apt install rpm
+apt install auditd
+apt install curl
 
 echo ""
 echo "###########################################"
@@ -131,8 +129,8 @@ echo "#                                         #"
 echo "###########################################"
 echo ""
 
-systemctl start rsyslog
-systemctl enable rsyslog
+sudo systemctl start rsyslog
+sudo systemctl enable rsyslog
 
 cp /etc/rsyslog.conf /etc/rsyslog.conf.backup
 sed -i 's/#module(load="imtcp")/module(load="imtcp")/' /etc/rsyslog.conf
@@ -140,7 +138,7 @@ sed -i 's/#input(type="imtcp" port="514")/input(type="imtcp" port="514")/' /etc/
 
 echo -e '\n$template RemoteLogs,"/var/log/%HOSTNAME%/%PROGRAMNAME%.log"\n*.* ?RemoteLogs\n& ~' >> /etc/rsyslog.conf
 
-systemctl restart rsyslog
+sudo systemctl restart rsyslog
 
 echo ""
 echo "###########################################"
@@ -164,11 +162,13 @@ echo "#                                         #"
 echo "###########################################"
 echo ""
 
-git clone https://github.com/Scribery/cockpit-session-recording.git /home/sysadm/cockpit-session-recording/
-cd /home/sysadm/cockpit-session-recording
-sudo make
-sudo make install
-sudo npm run eslint
+sudo systemctl start auditd
+sudo systemctl enable auditd
+
+cd /home/sysadm/
+curl -s https://s3.amazonaws.com/download.draios.com/stable/install-sysdig | sudo bash
+sysdig -w /home/sysadm/sysdig_output.dump &
+echo "Sysdig run as backgroung process. Ouput available on /home/sysadm/sysdig_output.dump"
 
 echo ""
 echo "###########################################"
