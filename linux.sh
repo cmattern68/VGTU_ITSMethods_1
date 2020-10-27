@@ -13,6 +13,8 @@ echo "#                                         #"
 echo "###########################################"
 echo ""
 
+# Updating & Upgrading system, then install needed dependencies
+
 apt update && apt upgrade
 apt install libpam-pwquality
 apt install rsyslog
@@ -58,6 +60,7 @@ echo "Permissions Set."
 useradd -d /home/sysadm -g sysadm -G root,administration,managers "Admin"
 chown Admin:sysadm /home/sysadm
 cp /etc/sudoers /etc/sudoers.backup
+# add admin to sudoers
 echo "Admin ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 useradd -d /home/ceo -g ceo -G sysadm,administration,managers "Chief"
@@ -85,10 +88,10 @@ setfacl -d -m g:sysadm:rwX /common
 setfacl -d -m g:administration:rwX /common
 setfacl -d -m g:managers:rwX /common
 
+# Setup access to special directory to Tom and Alice
 mkdir -m 700 /special
 setfacl -m user:Tom:rwX /special
 setfacl -m user:Alice:rwX /special
-# A qui on donne les droits ?
 
 echo "Common and Special directories created."
 
@@ -100,9 +103,11 @@ echo "#                                         #"
 echo "###########################################"
 echo ""
 
+# Setup access to CEO directory to Alice
+
 setfacl -m user:Alice:rw- /home/ceo
 
-echo "Accountant Alice has been provied rw access to /home/ceo."
+echo "Accountant Alice has been provied read and write access to /home/ceo."
 
 echo ""
 echo "###########################################"
@@ -129,6 +134,8 @@ echo "#                                         #"
 echo "###########################################"
 echo ""
 
+# Activate rsyslog as TCP client / server
+
 sudo systemctl start rsyslog
 sudo systemctl enable rsyslog
 
@@ -148,6 +155,8 @@ echo "#                                         #"
 echo "###########################################"
 echo ""
 
+# Change ownership of a file who belong to Anthony, to Alice
+
 sudo -u Anthony touch /home/managers/Anthony/Anthony.txt
 echo "This file was created by Anthony" >> /home/managers/Anthony/Anthony.txt
 chown Alice /home/managers/Anthony/Anthony.txt
@@ -161,6 +170,8 @@ echo "#        Task 8: Record Systems           #"
 echo "#                                         #"
 echo "###########################################"
 echo ""
+
+# Setup auditd and sysdig loggin system & run it as background process
 
 sudo systemctl start auditd
 sudo systemctl enable auditd
