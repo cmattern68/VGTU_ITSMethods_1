@@ -1,10 +1,13 @@
 #functions
 
+# fakeLogon function trigger a login action for the specified user, and create his home directory.
 function fakeLogon($name) {
     runas /user:$name echo "Home created for " + $name + "."
 }
 
 #end functions
+
+# ask to install microsoft powershell framework
 
 $prompt= Read-Host -Prompt 'Is Microsoft Management Framework install ? (y/n)'
 
@@ -30,10 +33,14 @@ echo "#                                         #"
 echo "###########################################" 
 echo "" 
 
+# create roles
+
 New-LocalGroup -Name "sysadm"
 New-LocalGroup -Name "ceo"
 New-LocalGroup -Name "administration"
 New-LocalGroup -Name "managers"
+
+# create each user and assign it to the correct group
 
 New-LocalUser -Name "Admini" -NoPassword
 Add-LocalGroupMember -Group "Administrators" -Member "Admini"
